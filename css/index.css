@@ -6246,3 +6246,144 @@ Offers Section
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
 }
+.zain-floating-actions {
+    position: fixed;
+    left: 25px;
+    bottom: 25px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.zain-floating-btn {
+    position: relative;
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 18px;
+    text-decoration: none;
+    font-size: 21px;
+    transition: all .35s ease;
+    box-shadow: 0 12px 35px rgba(0,0,0,.2);
+}
+
+.zain-floating-btn::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 21px;
+    border: 1px solid transparent;
+    opacity: 0;
+    transition: all .35s ease;
+}
+
+.zain-floating-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+}
+
+.zain-floating-btn:hover::before {
+    opacity: 1;
+}
+
+.zain-phone-btn {
+    background: var(--zain-black);
+    color: var(--zain-green);
+    border: 1px solid rgba(168,214,63,.3);
+}
+
+.zain-phone-btn:hover {
+    background: var(--zain-green);
+    color: var(--zain-black);
+    box-shadow: 0 15px 40px rgba(168,214,63,.25);
+}
+
+.zain-phone-btn::before {
+    border-color: rgba(168,214,63,.4);
+}
+
+.zain-whatsapp-btn {
+    background: #25d366;
+    color: #fff;
+}
+
+.zain-whatsapp-btn:hover {
+    background: #20bd5b;
+    color: #fff;
+    box-shadow: 0 15px 40px rgba(37,211,102,.3);
+}
+
+.zain-whatsapp-btn::before {
+    border-color: rgba(37,211,102,.45);
+}
+
+.zain-floating-btn i {
+    position: relative;
+    z-index: 2;
+}
+
+.zain-floating-tooltip {
+    position: absolute;
+    left: calc(100% + 13px);
+    top: 50%;
+    transform: translateY(-50%) translateX(8px);
+    padding: 8px 13px;
+    border-radius: 9px;
+    background: var(--zain-black);
+    color: #fff;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 700;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all .3s ease;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+}
+
+.zain-floating-tooltip::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background: var(--zain-black);
+    transform: translateY(-50%) rotate(45deg);
+}
+
+.zain-floating-btn:hover .zain-floating-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(0);
+}
+
+.zain-phone-btn .zain-floating-tooltip {
+    color: var(--zain-green);
+}
+
+@media (max-width: 575px) {
+
+    .zain-floating-actions {
+        left: 15px;
+        bottom: 15px;
+        gap: 9px;
+    }
+
+    .zain-floating-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 16px;
+        font-size: 19px;
+    }
+
+    .zain-floating-btn::before {
+        border-radius: 19px;
+    }
+
+    .zain-floating-tooltip {
+        display: none;
+    }
+}
