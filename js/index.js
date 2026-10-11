@@ -8,15 +8,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const navbar = document.getElementById("zainNavbar");
     const menuToggle = document.getElementById("zainMenuToggle");
 
-    if (navbar) {
-        window.addEventListener("scroll", function () {
-            if (window.scrollY > 40) {
-                navbar.classList.add("scrolled");
-            } else {
-                navbar.classList.remove("scrolled");
-            }
-        });
+    function handleNavbarScroll() {
+        if (!navbar) return;
+
+        navbar.classList.toggle("scrolled", window.scrollY > 40);
     }
+
+    handleNavbarScroll();
+    window.addEventListener("scroll", handleNavbarScroll, { passive: true });
 
 
     /* =========================
@@ -25,8 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const whatsappNumber = "966595001860";
 
-const packageMessages = {
-    "5G الأساسية": `مرحباً، أرغب في الاشتراك في باقة 5G الأساسية من زين.
+    const packageMessages = {
+        "5G الأساسية": `مرحباً، أرغب في الاشتراك في باقة 5G الأساسية من زين.
 
 سرعة الباقة: 100 ميجابت/ث
 السعر: 219 ريال شهرياً
@@ -38,7 +37,7 @@ const packageMessages = {
 
 أرجو تأكيد التغطية وتوضيح تفاصيل الاشتراك والتأسيس. شكراً لكم.`,
 
-    "5G المتقدمة": `مرحباً، أرغب في الاشتراك في باقة 5G المتقدمة من زين.
+        "5G المتقدمة": `مرحباً، أرغب في الاشتراك في باقة 5G المتقدمة من زين.
 
 سرعة الباقة: 200 ميجابت/ث
 السعر: 239 ريال شهرياً
@@ -55,7 +54,7 @@ const packageMessages = {
 
 أرجو تأكيد التغطية وتوضيح تفاصيل الاشتراك والتأسيس. شكراً لكم.`,
 
-    "5G المنزلية بلس": `مرحباً، أرغب في الاشتراك في باقة 5G المنزلية بلس من زين.
+        "5G المنزلية بلس": `مرحباً، أرغب في الاشتراك في باقة 5G المنزلية بلس من زين.
 
 سرعة الباقة: 300 ميجابت/ث
 السعر: 299 ريال شهرياً
@@ -67,7 +66,7 @@ const packageMessages = {
 
 أرجو تأكيد التغطية وتوضيح تفاصيل الاشتراك والتأسيس. شكراً لكم.`,
 
-    "5G سرعة لا محدودة": `مرحباً، أرغب في الاشتراك في باقة 5G سرعة لا محدودة من زين.
+        "5G سرعة لا محدودة": `مرحباً، أرغب في الاشتراك في باقة 5G سرعة لا محدودة من زين.
 
 السرعة: مفتوحة حسب تفاصيل الباقة والتغطية
 السعر: 299 ريال شهرياً
@@ -79,7 +78,7 @@ const packageMessages = {
 
 أرجو تأكيد التغطية وتوضيح تفاصيل الاشتراك. شكراً لكم.`,
 
-    "فايبر المنزلية بلس": `مرحباً، أرغب في الاشتراك في باقة فايبر المنزلية بلس من زين.
+        "فايبر المنزلية بلس": `مرحباً، أرغب في الاشتراك في باقة فايبر المنزلية بلس من زين.
 
 سرعة الباقة: 300 ميجابت/ث
 السعر: 289 ريال شهرياً
@@ -91,7 +90,7 @@ const packageMessages = {
 
 أرجو التحقق من توفر الفايبر في عنواني وتوضيح تفاصيل الاشتراك. شكراً لكم.`,
 
-    "فايبر بريميوم": `مرحباً، أرغب في الاشتراك في باقة فايبر بريميوم من زين.
+        "فايبر بريميوم": `مرحباً، أرغب في الاشتراك في باقة فايبر بريميوم من زين.
 
 سرعة الباقة: 500 ميجابت/ث
 السعر: 399 ريال شهرياً
@@ -102,31 +101,35 @@ const packageMessages = {
 
 أرجو التأكد من التغطية وتوضيح تفاصيل الاشتراك والعروض المتاحة. شكراً لكم.`,
 
-    "فايبر
+        "فايبر المنزلية بلاك": `مرحباً، أرغب في الاشتراك في باقة فايبر المنزلية بلاك من زين.
+
+سرعة الباقة: 1000 ميجابت/ث
+السعر: 999 ريال شهرياً
+
+مزايا الباقة:
+- مقويا شبكة مجاناً
+- 3 تطبيقات ترفيهية مجاناً
+
+أرجو التحقق من توفر الفايبر في عنواني وتوضيح تفاصيل الاشتراك. شكراً لكم.`
+    };
 
     document.querySelectorAll(".zain-package-btn").forEach(function (button) {
         button.addEventListener("click", function (event) {
             event.preventDefault();
 
-            const packageName = button.dataset.package;
+            const packageName = (button.dataset.package || "").trim();
             const message = packageMessages[packageName];
 
             if (!message) {
-                console.error(
-                    "لم يتم العثور على رسالة الباقة:",
-                    packageName
-                );
+                console.error("لم يتم العثور على رسالة الباقة:", packageName);
+                console.log("أسماء الباقات المتاحة:", Object.keys(packageMessages));
                 return;
             }
 
             const whatsappUrl =
                 `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
-            window.open(
-                whatsappUrl,
-                "_blank",
-                "noopener,noreferrer"
-            );
+            window.open(whatsappUrl, "_blank", "noopener,noreferrer");
         });
     });
 
@@ -136,57 +139,60 @@ const packageMessages = {
     ========================== */
 
     if (menuToggle) {
-        const mobileMenu = document.createElement("div");
+        let mobileMenu = document.querySelector(".zain-mobile-menu");
 
-        mobileMenu.className = "zain-mobile-menu";
+        if (!mobileMenu) {
+            mobileMenu = document.createElement("div");
+            mobileMenu.className = "zain-mobile-menu";
 
-        mobileMenu.innerHTML = `
-            <div class="zain-mobile-menu-header">
-                <span class="text-white my-3 d-block">
-                    القائمة الرئيسية
-                </span>
-            </div>
+            mobileMenu.innerHTML = `
+                <div class="zain-mobile-menu-header">
+                    <span class="text-white my-3 d-block">
+                        القائمة الرئيسية
+                    </span>
+                </div>
 
-            <a href="#">
-                <i class="fa-solid fa-house"></i>
-                الرئيسية
-            </a>
+                <a href="#">
+                    <i class="fa-solid fa-house"></i>
+                    الرئيسية
+                </a>
 
-            <a href="#services">
-                <i class="fa-solid fa-wifi"></i>
-                الخدمات
-            </a>
+                <a href="#services">
+                    <i class="fa-solid fa-wifi"></i>
+                    الخدمات
+                </a>
 
-            <a href="#offers">
-                <i class="fa-solid fa-tags"></i>
-                عروض 5G
-            </a>
+                <a href="#offers">
+                    <i class="fa-solid fa-tags"></i>
+                    عروض 5G
+                </a>
 
-            <a href="#coverage">
-                <i class="fa-solid fa-screwdriver-wrench"></i>
-                التركيب
-            </a>
+                <a href="#coverage">
+                    <i class="fa-solid fa-screwdriver-wrench"></i>
+                    التركيب
+                </a>
 
-            <a href="#faq">
-                <i class="fa-solid fa-tower-cell"></i>
-                الأسئلة الشائعة
-            </a>
+                <a href="#faq">
+                    <i class="fa-solid fa-tower-cell"></i>
+                    الأسئلة الشائعة
+                </a>
 
-            <a href="#blog">
-                <i class="fa-solid fa-newspaper"></i>
-                المدونة
-            </a>
+                <a href="#blog">
+                    <i class="fa-solid fa-newspaper"></i>
+                    المدونة
+                </a>
 
-            <a href="tel:0595001860" class="zain-mobile-phone">
-                <i class="fa-solid fa-phone-volume"></i>
-                <span>
-                    <small>اتصل الآن</small>
-                    0595001860
-                </span>
-            </a>
-        `;
+                <a href="tel:0595001860" class="zain-mobile-phone">
+                    <i class="fa-solid fa-phone-volume"></i>
+                    <span>
+                        <small>اتصل الآن</small>
+                        0595001860
+                    </span>
+                </a>
+            `;
 
-        document.body.appendChild(mobileMenu);
+            document.body.appendChild(mobileMenu);
+        }
 
         function closeMobileMenu() {
             mobileMenu.classList.remove("active");
@@ -198,9 +204,15 @@ const packageMessages = {
                 icon.classList.remove("fa-xmark");
                 icon.classList.add("fa-bars");
             }
+
+            menuToggle.setAttribute("aria-expanded", "false");
         }
 
-        menuToggle.addEventListener("click", function () {
+        menuToggle.setAttribute("aria-expanded", "false");
+
+        menuToggle.addEventListener("click", function (event) {
+            event.stopPropagation();
+
             const isOpen = mobileMenu.classList.toggle("active");
 
             document.body.classList.toggle("zain-menu-open", isOpen);
@@ -208,18 +220,25 @@ const packageMessages = {
             const icon = menuToggle.querySelector("i");
 
             if (icon) {
-                if (isOpen) {
-                    icon.classList.remove("fa-bars");
-                    icon.classList.add("fa-xmark");
-                } else {
-                    icon.classList.remove("fa-xmark");
-                    icon.classList.add("fa-bars");
-                }
+                icon.classList.toggle("fa-bars", !isOpen);
+                icon.classList.toggle("fa-xmark", isOpen);
             }
+
+            menuToggle.setAttribute("aria-expanded", String(isOpen));
         });
 
         mobileMenu.querySelectorAll("a").forEach(function (link) {
             link.addEventListener("click", closeMobileMenu);
+        });
+
+        document.addEventListener("click", function (event) {
+            if (
+                mobileMenu.classList.contains("active") &&
+                !mobileMenu.contains(event.target) &&
+                !menuToggle.contains(event.target)
+            ) {
+                closeMobileMenu();
+            }
         });
 
         document.addEventListener("keydown", function (event) {
@@ -339,15 +358,11 @@ const packageMessages = {
        FAQ
     ========================== */
 
-    const faqItems = document.querySelectorAll(
-        ".zain-faq-dark-item"
-    );
+    const faqItems = document.querySelectorAll(".zain-faq-dark-item");
 
     if (faqItems.length) {
         faqItems.forEach(function (item) {
-            const button = item.querySelector(
-                ".zain-faq-dark-question"
-            );
+            const button = item.querySelector(".zain-faq-dark-question");
 
             if (!button) {
                 return;
@@ -358,10 +373,19 @@ const packageMessages = {
 
                 faqItems.forEach(function (faq) {
                     faq.classList.remove("active");
+
+                    const faqButton = faq.querySelector(
+                        ".zain-faq-dark-question"
+                    );
+
+                    if (faqButton) {
+                        faqButton.setAttribute("aria-expanded", "false");
+                    }
                 });
 
                 if (!isActive) {
                     item.classList.add("active");
+                    button.setAttribute("aria-expanded", "true");
                 }
             });
         });
@@ -372,14 +396,9 @@ const packageMessages = {
        BLOG SWIPER
     ========================== */
 
-    const blogSwiperElement = document.querySelector(
-        ".zain-blog-swiper"
-    );
+    const blogSwiperElement = document.querySelector(".zain-blog-swiper");
 
-    if (
-        blogSwiperElement &&
-        typeof Swiper !== "undefined"
-    ) {
+    if (blogSwiperElement && typeof Swiper !== "undefined") {
         new Swiper(blogSwiperElement, {
             slidesPerView: 1,
             spaceBetween: 24,
@@ -425,14 +444,9 @@ const packageMessages = {
        OFFERS SWIPER
     ========================== */
 
-    const offersSwiperElement = document.querySelector(
-        ".offersSwiper"
-    );
+    const offersSwiperElement = document.querySelector(".offersSwiper");
 
-    if (
-        offersSwiperElement &&
-        typeof Swiper !== "undefined"
-    ) {
+    if (offersSwiperElement && typeof Swiper !== "undefined") {
         new Swiper(offersSwiperElement, {
             slidesPerView: 1,
             centeredSlides: true,
